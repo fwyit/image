@@ -1,4 +1,4 @@
-FROM        alpine
+FROM        node:8-alpine
 MAINTAINER  Jam < ops@doat.cc >
 
 ENV         MIRROR=mirrors.aliyun.com \
