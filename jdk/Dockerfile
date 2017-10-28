@@ -1,4 +1,4 @@
-FROM        alpine
+FROM        java:openjdk-8u111-alpine
 MAINTAINER  Jam < ops@doat.cc >
 
 ENV         MIRROR=mirrors.aliyun.com \
