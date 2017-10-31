@@ -1,4 +1,4 @@
-FROM        alpine
+FROM        golang:alpine
 MAINTAINER  Jam < ops@doat.cc >
 
 ENV         MIRROR=mirrors.aliyun.com \
