@@ -30,6 +30,7 @@ test -e $app || _exit "未找到运行包程序$app..."
 if test "$HACK" -o "$CLASS_BOOT"; then
     priv="$(stat -c %a $app)"
     CLASS_BOOT=${CLASS_BOOT:=BOOT-INF/classes}
+    test -d /default && cp -rf /default/* $CLASS_BOOT/
     mkdir -p $CLASS_BOOT && cp -rf $CONF_DIR/* $CLASS_BOOT/ && zip -ur $app $CLASS_BOOT/*
 fi
 
@@ -45,7 +46,7 @@ test "$confDir" && test -d $confDir && SPRING_OPTS="--spring.config.location=$co
 
 cd $APP_HOME
 
-test -e $log && mv $log ${log%.log}.$timestamp.log && echo "成功备份原始日志"
+test -e $LOG_FILE && mv $LOG_FILE ${LOG_FILE%.log}.$timestamp.log && echo "成功备份原始日志"
 
 cmd="java $JAVA_OPTS -jar $app $SPRING_OPTS --logging.file=$LOG_FILE "
 echo 
