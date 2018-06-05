@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 #author      : Jam < liujianhncn@gmail.com >
-#version     : 1.0
+#version     : 1.1
 #description : 本脚本主要用来启动应用服务
 
 APP_NAME=${APP_NAME:=app}
@@ -23,7 +23,10 @@ test -d $CONF_DIR && confDir="$(cd $CONF_DIR; pwd)/"
 _exit(){ echo "$@ ..." ; exit ;}
 
 test -d $APP_PATH && APP=${APP:=$(find $APP_PATH -name '*jar' | head -n 1)}
-test "$APP" && test "$APP" != "$app" && ln -f $APP $app # 强制从提供目录中获取应用程序
+# 强制从提供目录中获取应用程序
+if test "$APP" -a -e "$APP" -a "$APP" != "$app"; then
+    ln -f $APP $app || cp -f $APP $app
+fi
 test -e $app || _exit "未找到运行包程序$app..."
 
 # 强制复写程序包
