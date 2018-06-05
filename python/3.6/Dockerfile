@@ -90,6 +90,6 @@ RUN     set -ex; \
             -o \
             \( -type f -a \( -name '*.pyc' -o -name '*.pyo' \) \) \
             \) -exec rm -rf '{}' +; \
-        rm -f get-pip.py
+        rm -f get-pip.py && \
 
 CMD     ["python3"]

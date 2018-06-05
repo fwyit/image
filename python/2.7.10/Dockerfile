@@ -81,7 +81,7 @@ RUN         set -ex; \
             mkdir -p $(dirname $pipconf) && \
             echo "[global]" > $pipconf && \
             echo "index-url = https://$PIP_MIRROR" >> $pipconf && \
-            python get-pip.py \
+            python3 get-pip.py \
                 --disable-pip-version-check \
                 --no-cache-dir \
                 "pip==$PYTHON_PIP_VERSION" ; \
