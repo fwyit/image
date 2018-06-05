@@ -1,9 +1,11 @@
-FROM        alpine
+FROM        alpine:glibc
 MAINTAINER  Jam < ops@doat.cc >
 
-ENV         MIRROR=mirrors.aliyun.com \
-            NPM_MIRROR=registry.npm.taobao.org
-
-RUN         sed -i "s@dl-cdn.alpinelinux.org@$MIRROR@g" /etc/apk/repositories && \
+RUN         sed -i "s@dl-cdn.alpinelinux.org@mirrors.aliyun.com@g" /etc/apk/repositories && \
             apk update && \
-            apk add curl 
+            apk add --no-cache --virtual .dept \
+                tzdata && \
+            cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
+            echo "Asia/Shanghai" > /etc/timezone && \
+            apk del .dept && \
+            rm -rf /var/cache/apk/*
