@@ -33,8 +33,9 @@ test -e $app || _exit "未找到运行包程序$app..."
 if test "$HACK" -o "$CLASS_BOOT"; then
     priv="$(stat -c %a $app)"
     CLASS_BOOT=${CLASS_BOOT:=BOOT-INF/classes}
+    mkdir -p $CLASS_BOOT
     test -d /default && cp -rf /default/* $CLASS_BOOT/
-    mkdir -p $CLASS_BOOT && cp -rf $CONF_DIR/* $CLASS_BOOT/ && zip -ur $app $CLASS_BOOT/*
+    cp -rf $CONF_DIR/* $CLASS_BOOT/ && zip -ur $app $CLASS_BOOT/*
 fi
 
 mkdir -p $APP_HOME $LOG_PATH
