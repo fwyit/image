@@ -5,8 +5,7 @@
 
 APP_NAME=${APP_NAME:=app}
 APP_HOME=${APP_HOME:=/opt}
-APP_PATH=${APP_PATH:=/app}
-CONF_DIR=${CONF_DIR:=/config}
+APP_PATH=${APP_PATH:=/app} CONF_DIR=${CONF_DIR:=/config}
 LOG_PATH=${LOG_PATH:=/log}
 
 
@@ -18,7 +17,7 @@ test "$JDK_MEM" && JDKMEM=$JDK_MEM
 JDKMEM=${JDKMEM:=512M}
 timestamp=$(date +%Y%m%d%H%M)
 
-test -d $CONF_DIR && confDir="$(cd $CONF_DIR; pwd)/"
+test -d ${CONF_DIR:=/config} && confDir="$(cd $CONF_DIR; pwd)/"
 
 _exit(){ echo "$@ ..." ; exit ;}
 
@@ -35,7 +34,8 @@ if test "$HACK" -o "$CLASS_BOOT"; then
     CLASS_BOOT=${CLASS_BOOT:=BOOT-INF/classes}
     mkdir -p $CLASS_BOOT
     test -d /default && cp -rf /default/* $CLASS_BOOT/
-    cp -rf $CONF_DIR/* $CLASS_BOOT/ && zip -ur $app $CLASS_BOOT/*
+    cp -rf $CONF_DIR/* $CLASS_BOOT/
+    test -d $CLASS_BOOT && zip -ur $app $CLASS_BOOT/*
 fi
 
 mkdir -p $APP_HOME $LOG_PATH
@@ -44,9 +44,10 @@ JAVA_OPTS="-server -Xms$JDKMEM -Xmx$JDKMEM -Duser.timezone=GMT+08 -Dfile.encodin
 -verbose:gc -XX:NewRatio=3 -XX:SurvivorRatio=8 -XX:MaxMetaspaceSize=$JDKMEM -XX:+UseConcMarkSweepGC \
 -XX:CompressedClassSpaceSize=$JDKMEM -XX:MaxTenuringThreshold=5 -XX:CMSInitiatingOccupancyFraction=70 \
 -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:$LOG_PATH/server-gc.log.$timestamp -XX:+UseGCLogFileRotation \
--XX:NumberOfGCLogFiles=1 -XX:GCLogFileSize=$JDKMEM -Djava.awt.headless=true"
+-XX:NumberOfGCLogFiles=1 -XX:GCLogFileSize=$JDKMEM -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom"
 
-test "$confDir" && test -d $confDir && SPRING_OPTS="--spring.config.location=$confDir $SPRING_OPTS "
+#test "$confDir" && test -d $confDir && SPRING_OPTS="--spring.config.location=$confDir $SPRING_OPTS "
+test "$confDir" && test -d $confDir && SPRING_OPTS="--spring.config.location=classpath:/,file:$confDir $SPRING_OPTS "
 
 cd $APP_HOME
 
