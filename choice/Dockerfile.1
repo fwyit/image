@@ -1,0 +1,44 @@
+FROM        python:3.6-slim
+MAINTAINER  Jam < liujian@mail.com >
+
+ENV         DOWNLOAD_URL=http://updates.jg.eastmoney.com/Choice/EMQuantAPI/EMQuantAPI_Python_Linux.zip \
+            CHOICE_VERSION=V2.3.1.0 \
+            PIP_MIRROR=https://pypi.douban.com/simple
+
+RUN         sed -i 's/deb.debian.org/mirrors.aliyun.com/g' /etc/apt/sources.list && \
+            apt-get update && \
+            apt-get install -y unzip curl && \
+            tmpFile=/tmp/down.zip && \
+            curl -Lo $tmpFile $DOWNLOAD_URL && \
+            unzip $tmpFile -d /tmp/ && \
+            cd /tmp/EMQuantAPI_Python_Linux/Linux_3.x && \
+            packDir=/usr/local/lib/python3.6/site-packages && \
+            cp -f EmQuantAPI.py $packDir/EmQuantAPI.py && \
+            cp -rf libs $packDir/libs && \
+            pip install -i $PIP_MIRROR \
+                pymongo \
+                numpy==1.14.5 \
+                pillow \
+                pandas \
+                apscheduler \
+                click==6.7 \
+                Flask==1.0.2 \
+                itsdangerous==0.24 \
+                Jinja2==2.10 \
+                MarkupSafe==1.0 \
+                Werkzeug==0.14.1 \
+                flask_restful \
+                flask_restful_swagger \
+                flask_script \
+                && \
+            rm -rf /tmp/*
+
+ADD         init.sh /usr/bin/init.sh
+WORKDIR     /opt
+
+CMD         init.sh
+
+ADD         data-engine.zip /app.zip
+
+ENV         VER=0.0.1 \
+            COMMIT=97247f3efb2ae1a2db67f7283e1525f77a50f980
