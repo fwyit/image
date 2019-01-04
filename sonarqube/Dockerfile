@@ -5,9 +5,9 @@ MAINTAINER  Jam < ops@doat.cc >
 #             apk update && \
 #             apk add --no-cache
 
-ADD         ./default   /default
+COPY        ./default   /default
 
-RUN         cp -rf /default/ $SONARQUBE_HOME && \
+RUN         cp -rf /default/* $SONARQUBE_HOME/ && \
             rm -rf /default/*
 
 ADD         init.sh /usr/bin/sonar.sh
