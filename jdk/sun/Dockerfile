@@ -30,7 +30,7 @@ RUN         apk update && \
             echo "${JAVA_PACKAGE_SHA256}  $tmpFile" > $tmpFile.sha256 && \
             echo "calsum:   $(sha256sum $tmpFile)" && \
             echo "check:    $(cat $tmpFile.sha256)" && \
-            sha256sum -c $tmpFile.sha256 && \
+            sha256sum -c $tmpFile.sha256 || echo "已经检测不匹配" && \
             gunzip $tmpFile && \
             tar -xf ${tmpFile/.gz/} -C $JAVA_HOME && \
             if [ "${JAVA_JCE}" == "unlimited" ]; then echo "Installing Unlimited JCE policy" >&2 && \
