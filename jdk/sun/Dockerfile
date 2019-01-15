@@ -20,17 +20,17 @@ RUN         apk update && \
             echo "export LANG=C.UTF-8" > /etc/profile.d/locale.sh && \
             /usr/glibc-compat/sbin/ldconfig /lib /usr/glibc-compat/lib && \
             mkdir -p $(dirname $JAVA_HOME) && \
-            curl -jksSLH "Cookie: oraclelicense=accept-securebackup-cookie" \
-                -o /tmp/java.tar.gz \
+            tmpFile=/tmp/java.tar.gz && \
+            curl -jksSLH "Cookie: oraclelicense=accept-securebackup-cookie" -o $tmpFile \
                 http://download.oracle.com/otn-pub/java/jdk/${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-b${JAVA_VERSION_BUILD}/${JAVA_PACKAGE}-${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-linux-x64.tar.gz && \
             JAVA_PACKAGE_SHA256=$(\
                 curl -sSL https://www.oracle.com/webfolder/s/digest/${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}checksum.html | \
                 grep -E "${JAVA_PACKAGE}-${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-linux-x64\.tar\.gz" | \
                 grep -Eo '(sha256: )[^<]+' | cut -d: -f2 | xargs) && \
-            echo "${JAVA_PACKAGE_SHA256}  /tmp/java.tar.gz" > /tmp/java.tar.gz.sha256 && \
-            sha256sum -c /tmp/java.tar.gz.sha256 && \
-            gunzip /tmp/java.tar.gz && \
-            tar -xf /tmp/java.tar -C $JAVA_HOME && \
+            echo "${JAVA_PACKAGE_SHA256}  $tmpFile" > $tmpFile.sha256 && \
+            sha256sum -c $tmpFile.sha256 && \
+            gunzip $tmpFile && \
+            tar -xf ${tmpFile/.gz/} -C $JAVA_HOME && \
             if [ "${JAVA_JCE}" == "unlimited" ]; then echo "Installing Unlimited JCE policy" >&2 && \
                 curl -jksSLH "Cookie: oraclelicense=accept-securebackup-cookie" \
                     -o /tmp/jce_policy-${JAVA_VERSION_MAJOR}.zip \
