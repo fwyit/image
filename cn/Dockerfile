@@ -1,11 +1,13 @@
 FROM        alpine:glibc
 MAINTAINER  Jam < ops@doat.cc >
 
-RUN         sed -i "s@dl-cdn.alpinelinux.org@mirrors.aliyun.com@g" /etc/apk/repositories && \
+ADD         ./repo /usr/bin/repo
+RUN         repo ali && \
             apk update && \
             apk add --no-cache --virtual .dept \
                 tzdata && \
             cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
             echo "Asia/Shanghai" > /etc/timezone && \
             apk del .dept && \
+            repo re && \
             rm -rf /var/cache/apk/*

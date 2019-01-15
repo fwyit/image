@@ -1,0 +1,31 @@
+#!/usr/bin/env sh
+#author      : Jam < liujianhncn@gmail.com >
+#version     : 1.0
+#description : 本脚本主要用来切换alpine repo镜像地址
+
+SRC=dl-cdn.alpinelinux.org
+CNF=/etc/apk/repositories
+
+test -z "$(grep $SRC $CNF)" && echo "已经切换至国内镜像" && exit 0
+test -e $CNF.bak || cp $CNF $CNF.bak
+
+case $1 in
+    ali)
+        REPO=mirrors.aliyun.com
+        ;;
+    ali-vpc)
+        REPO=mirrors.cloud.aliyuncs.com
+        ;;
+    ori|src)
+        REPO=$SRC
+        ;;
+    reset|re|recovery|rb|rollback)
+        cp -f $CNF.bak $CNF && echo "成功回滚至原始cdn镜像" && exit 0
+        ;;
+    *)
+        REPO="$1"
+        ;;
+esac
+
+sed -i "s@$SRC@$REPO@g" /etc/apk/repositories
+
