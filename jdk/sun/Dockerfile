@@ -28,6 +28,8 @@ RUN         apk update && \
                 grep -E "${JAVA_PACKAGE}-${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-linux-x64\.tar\.gz" | \
                 grep -Eo '(sha256: )[^<]+' | cut -d: -f2 | xargs) && \
             echo "${JAVA_PACKAGE_SHA256}  $tmpFile" > $tmpFile.sha256 && \
+            echo "calsum:   $(sha256sum $tmpFile)" && \
+            echo "check:    $(cat $tmpFile.sha256)" && \
             sha256sum -c $tmpFile.sha256 && \
             gunzip $tmpFile && \
             tar -xf ${tmpFile/.gz/} -C $JAVA_HOME && \
