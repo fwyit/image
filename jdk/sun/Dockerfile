@@ -1,4 +1,4 @@
-FROM        alpine:cn
+FROM        fwyit/alpine:cn
 MAINTAINER  Jam < ops@doat.cc > 
 
 ENV         JAVA_VERSION=8u111 \
