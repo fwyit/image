@@ -16,7 +16,7 @@ RUN         apk update && \
                 curl \
                 gzip \
                 libstdc++ && \
-            ( /usr/glibc-compat/bin/localedef --force --inputfile POSIX --charmap UTF-8 C.UTF-8 || true ) && \
+            ( /usr/glibc-compat/bin/localedef --force --inputfile POSIX --charmap UTF-8 C.UTF-8 2>/dev/null || true ) && \
             echo "export LANG=C.UTF-8" > /etc/profile.d/locale.sh && \
             /usr/glibc-compat/sbin/ldconfig /lib /usr/glibc-compat/lib && \
             mkdir -p $(dirname $JAVA_HOME) && \
