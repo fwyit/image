@@ -33,5 +33,5 @@ COPY        docker-entrypoint.sh /usr/bin/es.sh
 
 EXPOSE      9200 9300
 
-ENTRYPOINT  ["es.sh"]
+ENTRYPOINT  ["/usr/bin/es.sh"]
 CMD         ["elasticsearch"]
