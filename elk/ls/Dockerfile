@@ -1,12 +1,12 @@
 FROM        fwyit/java:8u111
 
 ENV         PATH=/opt/logstash/bin:$PATH \
-            ES_HOME=/opt/logstash \
-            ES_USER=logstash \
-            ES_VERSION=6.5.4
+            LS_HOME=/opt/logstash \
+            LS_USER=logstash \
+            LS_VERSION=6.5.4
 
-RUN         addgroup -S $ES_USER && \
-            adduser -S -G $ES_USER $ES_USER && \
+RUN         addgroup -S $LS_USER && \
+            adduser -S -G $LS_USER $LS_USER && \
             apk add --no-cache \
                 'su-exec>=0.2' && \
             set -ex && \
@@ -16,22 +16,23 @@ RUN         addgroup -S $ES_USER && \
                 curl \
                 tar && \
             repo="https://artifacts.elastic.co/downloads" && \
-            app="logstash-${ES_VERSION}" && \
+            app="logstash-${LS_VERSION}" && \
             cd /tmp && \
             curl -Lo $app.tar.gz $repo/logstash/$app.tar.gz && \
             curl -Lo $app.sha $repo/logstash/$app.tar.gz.sha512 && \
             cat $app.sha | sha512sum -c && \
-            tar -zxf /tmp/$app.tar.gz -C $(dirname $ES_HOME) && \
-            mv $(dirname $ES_HOME)/logstash-${ES_VERSION} $ES_HOME && \
+            tar -zxf /tmp/$app.tar.gz -C $(dirname $LS_HOME) && \
+            mv $(dirname $LS_HOME)/logstash-${LS_VERSION} $LS_HOME && \
             apk del .deps && \
-            rm -rf /va/cache/apk/* /tmp/*
+            rm -rf /var/cache/apk/* /tmp/*
 
-ADD         config  $ES_HOME/config
-VOLUME      $ES_HOME/data
+WORKDIR     $LS_HOME
+ADD         config  $LS_HOME/config
+VOLUME      $LS_HOME/data
 
-COPY        docker-entrypoint.sh /usr/bin/es.sh
+COPY        ./docker-entrypoint.sh /usr/bin/elk.sh
 
 EXPOSE      9200 9300
 
-ENTRYPOINT  ["es.sh"]
-CMD         ["logstash"]
+ENTRYPOINT  ["sh", "/usr/bin/elk.sh"]
+CMD         ["kibana"]
