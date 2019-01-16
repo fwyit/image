@@ -21,8 +21,9 @@ RUN         apk update && \
             /usr/glibc-compat/sbin/ldconfig /lib /usr/glibc-compat/lib && \
             mkdir -p $(dirname $JAVA_HOME) && \
             tmpFile=/tmp/java.tar.gz && \
-            curl -jksSLH "Cookie: oraclelicense=accept-securebackup-cookie" -o $tmpFile \
-                http://download.oracle.com/otn-pub/java/jdk/${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-b${JAVA_VERSION_BUILD}/${JAVA_PACKAGE}-${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-linux-x64.tar.gz && \
+            url="http://download.oracle.com/otn-pub/java/jdk/${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-b${JAVA_VERSION_BUILD}/${JAVA_PACKAGE}-${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-linux-x64.tar.gz" && \
+            echo $url && \
+            curl -jksSLH "Cookie: oraclelicense=accept-securebackup-cookie" -o $tmpFile $url && \
             JAVA_PACKAGE_SHA256=$(\
                 curl -sSL https://www.oracle.com/webfolder/s/digest/${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}checksum.html | \
                 grep -E "${JAVA_PACKAGE}-${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-linux-x64\.tar\.gz" | \
