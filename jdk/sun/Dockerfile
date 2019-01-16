@@ -23,8 +23,10 @@ RUN         apk update && \
             tmpFile=/tmp/java.tar.gz && \
             url="http://download.oracle.com/otn-pub/java/jdk/${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-b${JAVA_VERSION_BUILD}/${JAVA_PACKAGE}-${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-linux-x64.tar.gz" && \
             checkUrl="https://www.oracle.com/webfolder/s/digest/${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}checksum.html" && \
-            echo "curl -jksSLOH Cookie: oraclelicense=accept-securebackup-cookie $url" && \
-            curl -jksSLH "Cookie: oraclelicense=accept-securebackup-cookie" -o $tmpFile $url && \
+            policyUrl="http://download.oracle.com/otn-pub/java/jce/${JAVA_VERSION_MAJOR}/jce_policy-${JAVA_VERSION_MAJOR}.zip" && \
+            cookie="Cookie: oraclelicense=accept-securebackup-cookie" && \
+            echo "curl -jksSLOH '$cookie' $url" && \
+            curl -jksSLH "$cookie" -o $tmpFile $url && \
             JAVA_PACKAGE_SHA256=$( curl -sSL $checkUrl | \
                 grep -E "${JAVA_PACKAGE}-${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-linux-x64\.tar\.gz" | \
                 grep -Eo '(sha256: )[^<]+' | cut -d: -f2 | xargs) && \
@@ -35,9 +37,7 @@ RUN         apk update && \
             gunzip $tmpFile && \
             tar -xf ${tmpFile/.gz/} -C $JAVA_HOME && \
             if [ "${JAVA_JCE}" == "unlimited" ]; then echo "Installing Unlimited JCE policy" >&2 && \
-                curl -jksSLH "Cookie: oraclelicense=accept-securebackup-cookie" \
-                    -o /tmp/jce_policy-${JAVA_VERSION_MAJOR}.zip \
-                    http://download.oracle.com/otn-pub/java/jce/${JAVA_VERSION_MAJOR}/jce_policy-${JAVA_VERSION_MAJOR}.zip && \
+                curl -jksSLH "$cookie" -o /tmp/jce_policy-${JAVA_VERSION_MAJOR}.zip $policyUrl && \
                 unzip /tmp/jce_policy-${JAVA_VERSION_MAJOR}.zip -d /tmp && \
                 cp -v /tmp/UnlimitedJCEPolicyJDK8/*.jar $JAVA_HOME/jre/lib/security; \
             fi && \
