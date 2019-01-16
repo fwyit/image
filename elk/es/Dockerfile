@@ -26,6 +26,7 @@ RUN         addgroup -S $ES_USER && \
             apk del .deps && \
             rm -rf /va/cache/apk/* /tmp/*
 
+WORKDIR     $ES_HOME
 ADD         config  $ES_HOME/config
 VOLUME      $ES_HOME/data
 
@@ -33,5 +34,5 @@ COPY        docker-entrypoint.sh /usr/bin/es.sh
 
 EXPOSE      9200 9300
 
-ENTRYPOINT  ["/usr/bin/es.sh"]
+ENTRYPOINT  ["sh", "/usr/bin/es.sh"]
 CMD         ["elasticsearch"]
