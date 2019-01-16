@@ -23,7 +23,7 @@ RUN         addgroup -S $KB_USER && \
             tar -zxf /tmp/$app.tar.gz -C $(dirname $KB_HOME) && \
             mv $(dirname $KB_HOME)/$app $KB_HOME && \
             apk del .deps && \
-            rm -rf /va/cache/apk/* /tmp/*
+            rm -rf /var/cache/apk/* /tmp/*
 
 WORKDIR     $KB_HOME
 ADD         config  $KB_HOME/config

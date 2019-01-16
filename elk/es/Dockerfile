@@ -24,7 +24,7 @@ RUN         addgroup -S $ES_USER && \
             tar -zxf /tmp/$app.tar.gz -C $(dirname $ES_HOME) && \
             mv $(dirname $ES_HOME)/elasticsearch-${ES_VERSION} $ES_HOME && \
             apk del .deps && \
-            rm -rf /va/cache/apk/* /tmp/*
+            rm -rf /var/cache/apk/* /tmp/*
 
 WORKDIR     $ES_HOME
 ADD         config  $ES_HOME/config
