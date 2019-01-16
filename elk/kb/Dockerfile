@@ -20,6 +20,7 @@ RUN         addgroup -S $KB_USER && \
             cd /tmp && \
             curl -Lo $app.tar.gz $repo/kibana/$app.tar.gz && \
             curl -Lo $app.sha $repo/kibana/$app.tar.gz.sha512 && \
+            cat $app.sha && sha512sum $app.tar.gz && \
             cat $app.sha | sha512sum -c && \
             tar -zxf /tmp/$app.tar.gz -C $(dirname $KB_HOME) && \
             mv $(dirname $KB_HOME)/kibana-${KB_VERSION} $KB_HOME && \
