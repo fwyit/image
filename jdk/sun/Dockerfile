@@ -22,10 +22,10 @@ RUN         apk update && \
             mkdir -p $(dirname $JAVA_HOME) && \
             tmpFile=/tmp/java.tar.gz && \
             url="http://download.oracle.com/otn-pub/java/jdk/${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-b${JAVA_VERSION_BUILD}/${JAVA_PACKAGE}-${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-linux-x64.tar.gz" && \
-            echo $url && \
+            checkUrl="https://www.oracle.com/webfolder/s/digest/${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}checksum.html" && \
+            echo "curl -jksSLOH Cookie: oraclelicense=accept-securebackup-cookie $url" && \
             curl -jksSLH "Cookie: oraclelicense=accept-securebackup-cookie" -o $tmpFile $url && \
-            JAVA_PACKAGE_SHA256=$(\
-                curl -sSL https://www.oracle.com/webfolder/s/digest/${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}checksum.html | \
+            JAVA_PACKAGE_SHA256=$( curl -sSL $checkUrl | \
                 grep -E "${JAVA_PACKAGE}-${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-linux-x64\.tar\.gz" | \
                 grep -Eo '(sha256: )[^<]+' | cut -d: -f2 | xargs) && \
             echo "${JAVA_PACKAGE_SHA256}  $tmpFile" > $tmpFile.sha256 && \
