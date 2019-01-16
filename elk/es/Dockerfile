@@ -17,9 +17,10 @@ RUN         addgroup -S $ES_USER && \
                 tar && \
             repo="https://artifacts.elastic.co/downloads" && \
             app="elasticsearch-${ES_VERSION}" && \
-            curl -Lo /tmp/$app.tar.gz $repo/elasticsearch/$app.tar.gz && \
-            curl -Lo /tmp/$app.sha $repo/elasticsearch/$app.tar.gz.sha512 && \
-            echo "$(cat /tmp/$app.sha)  /tmp/$app.tar.gz" | sha1sum -c && \
+            cd /tmp && \
+            curl -Lo $app.tar.gz $repo/elasticsearch/$app.tar.gz && \
+            curl -Lo $app.sha $repo/elasticsearch/$app.tar.gz.sha512 && \
+            cat $app.sha | sha512sum -c && \
             tar -zxf /tmp/$app.tar.gz -C $(dirname $ES_HOME) && \
             mv $(dirname $ES_HOME)/elasticsearch-${ES_VERSION} $ES_HOME && \
             apk del .deps && \
