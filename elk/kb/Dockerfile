@@ -16,13 +16,12 @@ RUN         addgroup -S $KB_USER && \
                 curl \
                 tar && \
             repo="https://artifacts.elastic.co/downloads" && \
-            app="kibana-${KB_VERSION}" && \
+            app="kibana-${KB_VERSION}-linux-x86_64" && \
             cd /tmp && \
-            curl -Lo $app.tar.gz $repo/kibana/$app-linux-x86_64.tar.gz && \
-            curl -Lo $app.sha $repo/kibana/$app-linux-x86_64.tar.gz.sha512 && \
-            cat $app.sha | sha512sum -c && \
+            curl -Lo $app.tar.gz $repo/kibana/$app.tar.gz && \
+            curl -Lo $app.sha $repo/kibana/$app.tar.gz.sha512 && \
             tar -zxf /tmp/$app.tar.gz -C $(dirname $KB_HOME) && \
-            mv $(dirname $KB_HOME)/kibana-${KB_VERSION} $KB_HOME && \
+            mv $(dirname $KB_HOME)/$app $KB_HOME && \
             apk del .deps && \
             rm -rf /va/cache/apk/* /tmp/*
 
