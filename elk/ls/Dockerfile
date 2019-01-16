@@ -35,4 +35,4 @@ COPY        ./docker-entrypoint.sh /usr/bin/elk.sh
 EXPOSE      9200 9300
 
 ENTRYPOINT  ["sh", "/usr/bin/elk.sh"]
-CMD         ["kibana"]
+CMD         ["logstash", "-f", "config/logstash.conf"]

@@ -1,22 +1,22 @@
 #!/bin/env sh
 
 set -e
-echo "Elasticsearch Home: ${ES_HOME:=/opt/elasticsearch}"
-echo "Elasticsearch User: ${ES_USER:=elasticsearch}"
+echo "ELK Home: ${LS_HOME:=/opt/logstash}"
+echo "ELK User: ${LS_USER:=logstash}"
 
-cd $ES_HOME
-test -d ${CONF_DIR:=/config} && cp -rf $CONF_DIR/* $ES_HOME/config
-
+cd $LS_HOME
+test -d ${CONF_DIR:=/config} && cp -rf $CONF_DIR/* $LS_HOME/config
+test -e $CONF_DIR/logstash.conf || cp $CONF_DIR/logstash-sample.conf $CONF_DIR/logstash.conf
 if [ "${1:0:1}" = '-' ]; then
-    set -- elasticsearch "$@"
+    set -- logstash "$@"
 fi
 
-if [ "$1" = 'elasticsearch' -a "$(id -u)" = '0' ]; then
-    for path in data logs ; do
-        chown -R $ES_USER:$ES_USER "$path"
+if [ "$1" = 'logstash' -a "$(id -u)" = '0' ]; then
+    for path in data logs config; do
+        chown -R $LS_USER:$LS_USER "$path"
     done
     
-    set -- su-exec $ES_USER "$@"
+    set -- su-exec $LS_USER "$@"
 fi
 
 exec "$@"
