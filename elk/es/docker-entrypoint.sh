@@ -1,8 +1,9 @@
 #!/usr/bin/env sh
 
 set -e
-echo "Elasticsearch Home: ${ES_HOME:=/opt/elasticsearch}"
-echo "Elasticsearch User: ${ES_USER:=elasticsearch}"
+APP=${APP:=elasticsearch}
+echo "Elasticsearch Home: ${ES_HOME:=/opt/$APP}"
+echo "Elasticsearch User: ${ES_USER:=$APP}"
 
 cd $ES_HOME
 test -d ${CONF_DIR:=/config} && cp -rf $CONF_DIR/* $ES_HOME/config
@@ -13,10 +14,10 @@ test "$(grep mktemp $envConf | grep 'XXX' | wc -l)" -lt 2 && \
     sed -i 's/-t elasticsearch/&.XXXXXX/g' $envConf
 
 if [ "${1:0:1}" = '-' ]; then
-    set -- elasticsearch "$@"
+    set -- $ES_USER "$@"
 fi
 
-if [ "$1" = 'elasticsearch' -a "$(id -u)" = '0' ]; then
+if [ "$1" = "$ES_USER" -a "$(id -u)" = '0' ]; then
     for path in data logs config; do
         chown -R $ES_USER:$ES_USER "$path"
     done

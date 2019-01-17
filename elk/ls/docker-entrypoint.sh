@@ -1,8 +1,9 @@
 #!/usr/bin/env sh
 
 set -e
-echo "ELK Home: ${LS_HOME:=/opt/logstash}"
-echo "ELK User: ${LS_USER:=logstash}"
+APP=${APP:=logstash}
+echo "ELK Home: ${LS_HOME:=/opt/$APP}"
+echo "ELK User: ${LS_USER:=$APP}"
 
 cd $LS_HOME
 test -d ${CONF_DIR:=/config} && cp -rf $CONF_DIR/* $LS_HOME/config
