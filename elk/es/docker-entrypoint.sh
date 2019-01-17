@@ -1,4 +1,4 @@
-#!/bin/env sh
+#!/usr/bin/env sh
 
 set -e
 echo "Elasticsearch Home: ${ES_HOME:=/opt/elasticsearch}"

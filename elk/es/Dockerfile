@@ -30,9 +30,9 @@ WORKDIR     $ES_HOME
 ADD         config  $ES_HOME/config
 VOLUME      $ES_HOME/data
 
-COPY        docker-entrypoint.sh /usr/bin/es.sh
+COPY        docker-entrypoint.sh /usr/bin/elk
 
 EXPOSE      9200 9300
 
-ENTRYPOINT  ["sh", "/usr/bin/es.sh"]
+ENTRYPOINT  ["elk"]
 CMD         ["elasticsearch"]

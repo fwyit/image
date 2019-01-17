@@ -29,9 +29,9 @@ WORKDIR     $KB_HOME
 ADD         config  $KB_HOME/config
 VOLUME      $KB_HOME/data
 
-COPY        ./docker-entrypoint.sh /usr/bin/elk.sh
+COPY        ./docker-entrypoint.sh /usr/bin/elk
 
-# EXPOSE      9200 9300
+EXPOSE      80
 
-ENTRYPOINT  ["sh", "/usr/bin/elk.sh"]
-CMD         ["kibana"]
+ENTRYPOINT  ["elk"]
+CMD         ["kibana", "-c", "config/kibana.yml"]

@@ -30,9 +30,9 @@ WORKDIR     $LS_HOME
 ADD         config  $LS_HOME/config
 VOLUME      $LS_HOME/data
 
-COPY        ./docker-entrypoint.sh /usr/bin/elk.sh
+COPY        ./docker-entrypoint.sh /usr/bin/elk
 
 EXPOSE      9200 9300
 
-ENTRYPOINT  ["sh", "/usr/bin/elk.sh"]
+ENTRYPOINT  ["elk"]
 CMD         ["logstash", "-f", "config/logstash.conf"]

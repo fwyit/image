@@ -1,4 +1,4 @@
-#!/bin/env sh
+#!/usr/bin/env sh
 
 set -e
 echo "ELK Home: ${LS_HOME:=/opt/logstash}"
