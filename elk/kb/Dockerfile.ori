@@ -1,2 +1,2 @@
-FROM       kibanna:6.5.4
+FROM       kibana:6.5.4
 MAINTAINER Jam < ops@doat.cc >

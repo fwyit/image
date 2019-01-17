@@ -3,13 +3,15 @@
 #author      : Jam < liujianhncn@gmail.com >
 #version     : 1.0
 #description : 本脚本主要用来创建ori配置文件
+import os
 
 VERSION='6.5.4'
-
-apps = ('elasticsearch', 'logstash', 'kibanna')
+os.chdir(os.path.dirname(__file__))
+apps = ('elasticsearch', 'logstash', 'kibana')
 shorts = ('es', 'ls', 'kb')
 
 assert len(apps) == len(shorts)
+
 for i in range(len(apps)):
     app = apps[i]
     code = shorts[i]
