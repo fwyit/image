@@ -6,7 +6,6 @@
 SRC=dl-cdn.alpinelinux.org
 CNF=/etc/apk/repositories
 
-test -z "$(grep $SRC $CNF)" && echo "已经切换至国内镜像" && exit 0
 test -e $CNF.bak || cp $CNF $CNF.bak
 
 case $1 in
@@ -27,5 +26,6 @@ case $1 in
         ;;
 esac
 
+test -z "$(grep $SRC $CNF)" && echo "已经切换至国内镜像" && exit 0
 sed -i "s@$SRC@$REPO@g" /etc/apk/repositories
 
