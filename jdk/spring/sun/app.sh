@@ -46,6 +46,8 @@ JAVA_OPTS="-server -Xms$JDKMEM -Xmx$JDKMEM -Duser.timezone=GMT+08 -Dfile.encodin
 -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:$LOG_PATH/server-gc.log.$timestamp -XX:+UseGCLogFileRotation \
 -XX:NumberOfGCLogFiles=1 -XX:GCLogFileSize=$JDKMEM -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom"
 
+test "$CLASS_BOOT" && test "$BOOT_CLASS" && java $JAVA_OPTS -cp $BOOT_CLASS:$app $CLASS_BOOT
+
 #test "$confDir" && test -d $confDir && SPRING_OPTS="--spring.config.location=$confDir $SPRING_OPTS "
 test "$confDir" && test -d $confDir && SPRING_OPTS="--spring.config.location=classpath:/,file:$confDir $SPRING_OPTS "
 
