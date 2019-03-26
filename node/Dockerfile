@@ -1,9 +1,21 @@
-FROM        node:8-alpine
-MAINTAINER  Jam < ops@doat.cc >
+FROM    fwyit/alpine:cn
 
-ENV         MIRROR=mirrors.aliyun.com \
-            NPM_MIRROR=registry.npm.taobao.org
+RUN     repo ali && \
+        apk update && \
+        apk add --no-cache \
+            nodejs-npm \
+            yarn \
+            && \
+        repo reset && \
+        rm -rf /root/cache/* /tmp/*
 
-RUN         sed -i "s@dl-cdn.alpinelinux.org@$MIRROR@g" /etc/apk/repositories && \
-            apk update && \
-            apk add curl 
+RUN     NPM_CN=https://registry.npm.taobao.org/ && \
+        npm config set registry $NPM_CN && \
+        yarn config set registry $NPM_CN && \
+        npm install -g --registry=https://registry.npm.taobao.org/ nbnpm && \
+        rm -rf /root/.npm/ /tmp/*
+
+ADD     init.sh /usr/bin/node.sh
+WORKDIR /project
+ENTRYPOINT  ["node.sh"]
+CMD     ["nbnpm"]
