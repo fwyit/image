@@ -41,19 +41,20 @@ fi
 mkdir -p $APP_HOME $LOG_PATH
 
 JAVA_OPTS="-server -Xms$JDKMEM -Xmx$JDKMEM -Duser.timezone=GMT+08 -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8 \
--verbose:gc -XX:NewRatio=3 -XX:SurvivorRatio=8 -XX:MaxMetaspaceSize=$JDKMEM -XX:+UseConcMarkSweepGC \
+-verbose:gc -XX:NewRatio=3 -XX:SurvivorRatio=8 -XX:MaxMetaspaceSize=$JDKMEM  \
 -XX:CompressedClassSpaceSize=$JDKMEM -XX:MaxTenuringThreshold=5 -XX:CMSInitiatingOccupancyFraction=70 \
--XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:$LOG_PATH/server-gc.log.$timestamp -XX:+UseGCLogFileRotation \
--XX:NumberOfGCLogFiles=1 -XX:GCLogFileSize=$JDKMEM -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom"
+-XX:GCLogFileSize=$JDKMEM -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom"
 
-test "$CLASS_BOOT" && test "$BOOT_CLASS" && java $JAVA_OPTS -cp $BOOT_CLASS:$app $CLASS_BOOT
+test "$GC" && JAVA_OPTS="$JAVA_OPTS -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:$LOG_PATH/server-gc.log.$timestamp -XX:+UseGCLogFileRotation \
+-XX:NumberOfGCLogFiles=1 -XX:+UseConcMarkSweepGC"
 
 #test "$confDir" && test -d $confDir && SPRING_OPTS="--spring.config.location=$confDir $SPRING_OPTS "
 test "$confDir" && test -d $confDir && SPRING_OPTS="--spring.config.location=classpath:/,file:$confDir $SPRING_OPTS "
+test "$BOOT_CLASS" && test "$BOOT_LIBS" && java $JAVA_OPTS $(eval echo $SPRING_OPTS | sed 's/--/-D/g') -cp $BOOT_LIBS:$app $BOOT_CLASS
 
 cd $APP_HOME
 
-test -e $LOG_FILE && mv $LOG_FILE ${LOG_FILE%.log}.$timestamp.log && echo "成功备份原始日志"
+test -e $LOG_FILE && cp $LOG_FILE ${LOG_FILE%.log}.$timestamp.log && echo '' > $LOG_FILE && echo "成功备份原始日志"
 
 cmd="java $JAVA_OPTS -jar $app $SPRING_OPTS --logging.file=$LOG_FILE "
 echo 
