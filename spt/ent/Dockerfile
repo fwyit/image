@@ -13,7 +13,7 @@ RUN     cd /tmp && \
             "https://www.splunk.com/bin/splunk/DownloadActivityServlet?architecture=x86_64&platform=linux&version=${ver}&product=splunk&filename=$app&wget=true" && \
         base=$(dirname $SPLUNK_HOME) && \
         mkdir -p $base && \
-        tar -zxvf $app -C $base && \
+        tar -zxf $app -C $base && \
         rm -rf /tmp/* /var/cache/apk/*
 
 ADD     init.sh /usr/bin/spt
@@ -22,4 +22,4 @@ VOLUME  $SPLUNK_HOME/etc/system/local
 WORKDIR $SPLUNK_HOME
 
 EXPOSE  9997 8000
-ENTRYPOINT  ['spt']
+ENTRYPOINT  ['/usr/bin/spt']
