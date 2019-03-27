@@ -5,7 +5,8 @@
 
 APP_NAME=${APP_NAME:=app}
 APP_HOME=${APP_HOME:=/opt}
-APP_PATH=${APP_PATH:=/app} CONF_DIR=${CONF_DIR:=/config}
+APP_PATH=${APP_PATH:=/app}
+CONF_DIR=${CONF_DIR:=/config}
 LOG_PATH=${LOG_PATH:=/log}
 
 

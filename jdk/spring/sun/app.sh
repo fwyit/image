@@ -41,11 +41,11 @@ fi
 mkdir -p $APP_HOME $LOG_PATH
 
 JAVA_OPTS="-server -Xms$JDKMEM -Xmx$JDKMEM -Duser.timezone=GMT+08 -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8 \
--verbose:gc -XX:NewRatio=3 -XX:SurvivorRatio=8 -XX:MaxMetaspaceSize=$JDKMEM  \
+-XX:NewRatio=3 -XX:SurvivorRatio=8 -XX:MaxMetaspaceSize=$JDKMEM  \
 -XX:CompressedClassSpaceSize=$JDKMEM -XX:MaxTenuringThreshold=5 -XX:CMSInitiatingOccupancyFraction=70 \
 -XX:GCLogFileSize=$JDKMEM -Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom"
 
-test "$GC" && JAVA_OPTS="$JAVA_OPTS -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:$LOG_PATH/server-gc.log.$timestamp -XX:+UseGCLogFileRotation \
+test "$GC" && JAVA_OPTS="$JAVA_OPTS -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:$LOG_PATH/server-gc.log.$timestamp -XX:+UseGCLogFileRotation \
 -XX:NumberOfGCLogFiles=1 -XX:+UseConcMarkSweepGC"
 
 #test "$confDir" && test -d $confDir && SPRING_OPTS="--spring.config.location=$confDir $SPRING_OPTS "
