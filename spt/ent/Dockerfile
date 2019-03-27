@@ -11,7 +11,9 @@ RUN     cd /tmp && \
         ver=${SPLUNK_VERSION%%-*} && \
         wget -O $app \
             "https://www.splunk.com/bin/splunk/DownloadActivityServlet?architecture=x86_64&platform=linux&version=${ver}&product=splunk&filename=$app&wget=true" && \
-        tar -zxvf $app -C $(dirname $SPLUNK_HOME) && \
+        base=$(dirname $SPLUNK_HOME) && \
+        mkdir -p $base && \
+        tar -zxvf $app -C $bas && \
         rm -rf /tmp/* /var/cache/apk/*
 
 ADD     init.sh /usr/bin/spt
