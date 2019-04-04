@@ -9,3 +9,5 @@ RUN     root=~/.arthas/lib && \
         wget https://maven.aliyun.com/repository/public/com/taobao/arthas/arthas-packaging/$ARTHAS_VER/$app && \
         unzip $app -d $root && \
         rm -rf /tmp/*
+
+ADD     init.sh /usr/local/bin/debug
