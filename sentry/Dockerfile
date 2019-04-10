@@ -6,6 +6,25 @@ RUN     repo ali && \
             python \
             && \
         apk add --no-cache --virtual .deps \
+            git \
+            cargo \
+            bash \
+            make \
+            py2-pip \
+            libffi-dev \
+            python2-dev \
+            && \
+        pip install semaphore && \
+        repo reset && \
+        apk del .deps && \
+        rm -rf /tmp/* /var/cache/apk/* /root/*
+
+RUN     repo ali && \
+        apk update && \
+        apk add --no-cache \
+            python \
+            && \
+        apk add --no-cache --virtual .deps \
             python2-dev \
             musl-dev \
             linux-headers \
@@ -21,11 +40,12 @@ RUN     repo ali && \
             jpeg-dev \
             zlib-dev \
             libffi-dev \
+            cargo \
             && \
         cd /tmp/ && \
         curl -LO https://raw.githubusercontent.com/getsentry/sentry/master/requirements-base.txt && \
         index=https://pypi.douban.com/simple/ && \
-        python -m pip install -i $index milksnake 'pytest<3.6' && \
+        python -m pip install -i $index 'pytest<3.6' && \
         python -m pip install -i $index 'pillow<=4.2.1' && \
         python -m pip install -i $index -r requirements-base.txt && \
         repo reset && \

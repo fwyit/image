@@ -30,3 +30,4 @@ Temporary Items
 *.zip
 *.jar
 *.bak
+.env
