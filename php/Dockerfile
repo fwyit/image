@@ -13,7 +13,6 @@ RUN     repo ali && \
         rm -rf /tmp/* /var/cache/apk/* /root/*
 
 WORKDIR /var/www
-VOLUME  /var/www
 EXPOSE  9000
 
 ADD     init.sh /phpfpm
