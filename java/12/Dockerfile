@@ -16,5 +16,5 @@ RUN     ver="${JAVA_VERSION}.${JAVA_UPDATE}.${JAVA_BUILD}" && \
         wget --header "Cookie: oraclelicense=accept-securebackup-cookie;" $url && \
         tar -zxvf $app && \
         mkdir -p $JAVA_HOME && \
-        mv jdk1.${JAVA_VERSION}.0_${JAVA_UPDATE}/* $JAVA_HOME/ && \
+        mv jdk-${ver}/* $JAVA_HOME/ && \
         rm -rf /tmp/* /root/*
