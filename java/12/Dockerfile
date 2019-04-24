@@ -9,7 +9,7 @@ ENV     JAVA_VERSION=12 \
 
 
 RUN     ver="${JAVA_VERSION}.${JAVA_UPDATE}.${JAVA_BUILD}" && \
-        app=jdk-$ver_linux-x64_bin.tar.gz && \
+        app=jdk-${ver}_linux-x64_bin.tar.gz && \
         cd /tmp/ && \
         url="https://download.oracle.com/otn-pub/java/jdk/$ver+${JAVA_VERSION}/$JAVA_SID/$app" && \
         echo $url && \
