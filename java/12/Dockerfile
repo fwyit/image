@@ -10,11 +10,10 @@ ENV     JAVA_VERSION=12 \
 
 RUN     ver="${JAVA_VERSION}.${JAVA_UPDATE}.${JAVA_BUILD}" && \
         app=jdk-${ver}_linux-x64_bin.tar.gz && \
-        cd /tmp/ && \
         url="https://download.oracle.com/otn-pub/java/jdk/$ver+${JAVA_VERSION}/$JAVA_SID/$app" && \
-        echo $url && \
+        cd /tmp/ && echo $url && \
         wget --header "Cookie: oraclelicense=accept-securebackup-cookie;" $url && \
-        tar -zxvf $app && \
+        tar -zxf $app && \
         mkdir -p $JAVA_HOME && \
         mv jdk-${ver}/* $JAVA_HOME/ && \
         rm -rf /tmp/* /root/*
