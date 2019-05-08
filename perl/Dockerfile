@@ -21,3 +21,10 @@ RUN     cd /tmp/ && \
         ln -sf /usr/local/awstats-${AWS_VER} /usr/local/awstats && \
         cp -rf /usr/local/awstats/wwwroot/* /var/www/ && \
         cp -f /usr/local/awstats/tools/nginx/awstats-fcgi.php /var/www/cgi-bin/fcgi.php
+
+
+RUN     repo ali && apk update && apk add nginx
+ADD     aws.sh /usr/local/bin/aws
+ENTRYPOINT  ["aws"]
+CMD     ["C"]
+ENV     PATH=$PATH:/usr/local/awstats/tools

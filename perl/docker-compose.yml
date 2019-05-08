@@ -1,0 +1,22 @@
+version: '3'
+services:
+  app:
+    build: .
+    image: registry.cn-beijing.aliyuncs.com/iops/fwy:awstat
+    container_name: awstats
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+    volumes:
+      - ./tmp:/var/log/nginx
+      - ./tmp:/etc/awstats
+      - ./default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./aws.sh:/usr/local/bin/aws:ro
+      - ./bak:/opt/web/stat/
+    network_mode: host
+    # command: 'sh'
+    entrypoint: tail -f /etc/hosts
