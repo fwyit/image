@@ -21,14 +21,14 @@ _nbnpm(){ nbnpm i && eval $NODE_ARGS nbnpm run build $BUILD_ARGS|| exit 2 ; }
 _yarn(){ yarn install && yarn build $BUILD_ARGS || exit 2 ;}
 _gulp(){ nbnpm i && eval $@ ; }
 _npm(){ npm i && eval $NODE_ARGS npm run build $BUILD_ARGS|| exit 2 ; }
-_sh(){ echo "准备直接进入容器..."; exec sh $@; }
+_sh(){ echo "准备直接进入容器..."; $@ ; exec sh; }
 
 arg=$1 && shift
 
 case $arg in
     npm|node)   _npm    ;;
     yarn)       _yarn   ;;
-    sh)         _sh     ;;
+    sh)         _sh   $@;;
     gulp)       _gulp $@;; 
     nbnpm)      _nbnpm  ;;
     help|h)     _help   ;;
