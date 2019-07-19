@@ -1,6 +1,6 @@
-FROM    fwyit/alpine:cn
+FROM    fwyit/alpine:gosu
 
-ENV NODE_VERSION 8.16.0
+ENV     NODE_VERSION 8.16.0
 
 RUN     repo ali && \
         apk update && \
@@ -55,7 +55,7 @@ RUN     repo ali && \
 
 ENV     YARN_VERSION 1.15.2
 
-RUN     repo cn && \
+RUN     repo ali && \
         apk update && \
         apk add --no-cache --virtual .build-deps-yarn curl gnupg tar && \
         for key in \
@@ -65,8 +65,8 @@ RUN     repo cn && \
             gpg --batch --keyserver hkp://ipv4.pool.sks-keyservers.net --recv-keys "$key" || \
             gpg --batch --keyserver hkp://pgp.mit.edu:80 --recv-keys "$key" ; \
         done && \
-        curl -fsSLO --compressed "https://npm.taobao.org/mirrors/yarn/$YARN_VERSION/yarn-v$YARN_VERSION.tar.gz" && \
-        curl -fsSLO --compressed "https://npm.taobao.org/mirrors/yarn/$YARN_VERSION/yarn-v$YARN_VERSION.tar.gz.asc" && \
+        curl -fsSLO --compressed "https://npm.taobao.org/mirrors/yarn/v$YARN_VERSION/yarn-v$YARN_VERSION.tar.gz" && \
+        curl -fsSLO --compressed "https://npm.taobao.org/mirrors/yarn/v$YARN_VERSION/yarn-v$YARN_VERSION.tar.gz.asc" && \
         gpg --batch --verify yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz && \
         mkdir -p /opt && \
         tar -xzf yarn-v$YARN_VERSION.tar.gz -C /opt/ && \
@@ -77,7 +77,8 @@ RUN     repo cn && \
         repo reset && \
         rm -rf /tmp/* /var/cache/apk/* /root/.cache/*
 
-RUN     repo ali && \
+RUN     NPM_MIRROR=https://registry.npm.taobao.org/ && \
+        repo ali && \
         apk update && \
         apk add git openssh-client && \
         apk add --no-cache --virtual .deps \
@@ -86,20 +87,23 @@ RUN     repo ali && \
             python \
             make \
             gcc \
+            bash \
+            perl \
             g++ && \
         npm config set registry $NPM_MIRROR && \
         yarn config set registry $NPM_MIRROR && \
         ( test "$http_proxy" && npm config set proxy=$http_proxy || echo "未找到代理" ) && \
-        export PATH=./node_modules/.bin:$PATH && \
-        npm i nbnpm -g && \
-        nbnpm i nbnpm node-sass && \
-        nbnpm rebuild node-sass && \
+        cd /usr/local/lib/node_modules/npm && yarn add nbnpm node-sass --global && \
+        ln -sf ../node_modules/.bin/nbnpm ./bin/nbnpm && \
+        ln -sf `pwd`/bin/nbnpm /usr/local/bin/nbnpm && \
         rm -rf ~/.npminstall_tarball/* ~/.npm/_cacache /usr/local/share/.cache/yarn/* && \
         apk del .deps && \
         repo reset && \
-        rm -rf /tmp/* /var/cache/apk/* /root/.cache/*
+        mkdir -p /project && chown -R node:node /project && \
+        rm -rf /tmp/* /var/cache/apk/* /root/.cache/* /usr/local/share/.cache
 
 ADD     init.sh /usr/bin/node.sh
+USER    node
 WORKDIR /project
-ENTRYPOINT  ["node.sh"]
+ENTRYPOINT ["node.sh"]
 CMD     ["nbnpm"]
